@@ -10,6 +10,9 @@ dotenv.config()
 
 connectDB()
 
+// Allow us to accept JSON data in the body.
+app.use(express.json())
+
 app.get('/', (req, res) => {
   res.send('Vocabulary Hour')
 })
