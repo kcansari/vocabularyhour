@@ -1,0 +1,3 @@
+# VocabularyHour is being developed :construction:
+
+## Coming soon...
