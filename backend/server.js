@@ -15,9 +15,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/words', wordRoutes)
-
 app.use(notFound)
-
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3000
