@@ -17,7 +17,7 @@ const getWords = asyncHandler(async (req, res) => {
 // @desc Fetch single word
 // @route GET /api/words/:id
 // @access Public
-const getWord = asyncHandler(async (req, res) => {
+const getWordById = asyncHandler(async (req, res) => {
   const word = await Word.findById(req.params.id)
 
   if (!word) {
@@ -82,4 +82,4 @@ const deleteWord = asyncHandler(async (req, res) => {
   res.json({ message: ` '${word.name}' removed ` })
 })
 
-export { getWords, getWord, updateWord, createWord, deleteWord }
+export { getWords, getWordById, updateWord, createWord, deleteWord }

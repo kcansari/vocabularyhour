@@ -1,7 +1,7 @@
 import express from 'express'
 import {
   getWords,
-  getWord,
+  getWordById,
   updateWord,
   createWord,
   deleteWord,
@@ -10,6 +10,6 @@ import {
 const router = express.Router()
 
 router.route('/').get(getWords).post(createWord)
-router.route('/:id').get(getWord).put(updateWord).delete(deleteWord)
+router.route('/:id').get(getWordById).put(updateWord).delete(deleteWord)
 
 export default router

@@ -2,7 +2,9 @@ import colors from 'colors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import words from './data/words.js'
+import users from './data/users.js'
 import Word from './models/wordModel.js'
+import User from './models/userModel.js'
 import connectDB from './config/db.js'
 
 dotenv.config()
@@ -11,8 +13,17 @@ connectDB()
 const importData = async () => {
   try {
     await Word.deleteMany()
+    await User.deleteMany()
 
-    await Word.insertMany(words)
+    const createdUsers = await User.insertMany(users)
+
+    const adminUser = createdUsers[0]._id
+
+    const sampleWords = words.map((word) => {
+      return { ...word, user: adminUser }
+    })
+
+    await Word.insertMany(sampleWords)
 
     console.log('Data Imported'.green.inverse)
     process.exit()
@@ -25,6 +36,7 @@ const importData = async () => {
 const destroyData = async () => {
   try {
     await Word.deleteMany()
+    await User.deleteMany()
 
     console.log('Data Destroyed!'.red.inverse)
     process.exit()
