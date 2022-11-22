@@ -7,12 +7,11 @@ import asyncHandler from 'express-async-handler'
 const getWords = asyncHandler(async (req, res) => {
   const words = await Word.find({})
 
-  if (words.length > 0) {
-    res.send(words)
-  } else {
+  if (!words.length > 0) {
     res.status(404)
     throw new Error('Word not found')
   }
+  res.send(words)
 })
 
 // @desc Fetch single word
@@ -21,50 +20,51 @@ const getWords = asyncHandler(async (req, res) => {
 const getWord = asyncHandler(async (req, res) => {
   const word = await Word.findById(req.params.id)
 
-  if (word) {
-    res.send(word)
-  } else {
+  if (!word) {
     res.status(404)
     throw new Error('Word not found')
   }
+  res.send(word)
 })
 
 // @desc Create a word
 // @route POST /api/words
 // @access Public
 const createWord = asyncHandler(async (req, res) => {
-  const { name } = req.body
+  const { name, meaning } = req.body
 
-  if (name) {
-    const word = new Word({
-      name: name,
-    })
-
-    const createdWord = await word.save()
-    res.status(201).json(createdWord)
-  } else {
+  if (!name && !meaning) {
     res.status(404)
     throw new Error('Write a valid name')
   }
+
+  const word = new Word({
+    name: name,
+    meaning: meaning,
+  })
+
+  const createdWord = await word.save()
+  res.status(201).json(createdWord)
 })
 
 // @desc Update a word
 // @route PUT /api/words/:id
 // @access Public
 const updateWord = asyncHandler(async (req, res) => {
-  const { name } = req.body
+  const { name, meaning } = req.body
 
   const word = await Word.findById(req.params.id)
 
-  if (word) {
-    word.name = name
-
-    const updatedWord = await word.save()
-    res.json(updatedWord)
-  } else {
+  if (!word) {
     res.status(404)
     throw new Error('Word not found')
   }
+
+  word.name = name
+  word.meaning = meaning
+
+  const updatedWord = await word.save()
+  res.json(updatedWord)
 })
 
 // @desc Detele a word
@@ -73,13 +73,13 @@ const updateWord = asyncHandler(async (req, res) => {
 const deleteWord = asyncHandler(async (req, res) => {
   const word = await Word.findById(req.params.id)
 
-  if (word) {
-    await word.remove()
-    res.json({ message: ` '${word.name}' removed ` })
-  } else {
+  if (!word) {
     res.status(404)
     throw new Error('Word not found')
   }
+
+  await word.remove()
+  res.json({ message: ` '${word.name}' removed ` })
 })
 
 export { getWords, getWord, updateWord, createWord, deleteWord }
