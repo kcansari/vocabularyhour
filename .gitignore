@@ -43,13 +43,16 @@ node_modules/
 /node_modules
 node_modules
 jspm_packages/
+.pnp/
+.pnp.js/
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
 # TypeScript cache
 *.tsbuildinfo
-
+next-env.d.ts/
+next-env.d.ts
 # Optional npm cache directory
 .npm
 
@@ -80,6 +83,7 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
+.env*.local/
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -92,6 +96,12 @@ out
 # Nuxt.js build / generate output
 .nuxt
 dist
+
+# misc
+.DS_Store
+*.pem
+.DS_Store/
+*.pem/
 
 # Gatsby files
 .cache/
@@ -123,6 +133,7 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+coverage/
 
 # yarn v2
 .yarn/cache
@@ -130,3 +141,14 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+#vercel
+.vercel/
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+build/
