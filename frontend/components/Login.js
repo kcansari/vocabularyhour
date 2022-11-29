@@ -11,27 +11,27 @@ import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const pages = ['Sign in', 'Sign up']
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
-  const [anchorElUser, setAnchorElUser] = React.useState(null)
+  const router = useRouter()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget)
   }
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget)
-  }
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (e) => {
     setAnchorElNav(null)
-  }
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null)
+    e.preventDefault()
+    if (e.target.id === 'Sign in') {
+      router.push(`/account/login`)
+    } else {
+      console.log('register')
+      // TO DO add register page
+    }
   }
 
   return (
@@ -71,7 +71,6 @@ function ResponsiveAppBar() {
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
-              // flexGrow: 1,
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.1rem',
@@ -128,6 +127,8 @@ function ResponsiveAppBar() {
                     textAlign='center'
                     color={page === 'Sign up' ? 'error' : 'black'}
                     variant='contained'
+                    type='submit'
+                    id={page}
                   >
                     {page}
                   </Typography>
@@ -151,6 +152,7 @@ function ResponsiveAppBar() {
                 size={page === 'Sign up' ? 'small' : 'large'}
                 variant={page === 'Sign up' ? 'contained' : 'none'}
                 color='error'
+                id={page}
               >
                 {page}
               </Button>
