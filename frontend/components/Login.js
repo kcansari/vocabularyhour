@@ -26,11 +26,10 @@ function ResponsiveAppBar() {
   const handleCloseNavMenu = (e) => {
     setAnchorElNav(null)
     e.preventDefault()
-    if (e.target.id === 'Sign in') {
-      router.push(`/account/login`)
+    if (e.target.id === 'Sign up') {
+      router.push(`/account/register`)
     } else {
-      console.log('register')
-      // TO DO add register page
+      router.push(`/account/login`)
     }
   }
 
