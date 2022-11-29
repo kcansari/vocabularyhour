@@ -4,5 +4,5 @@ import Logout from './Logout'
 export default function Header() {
   const user = true
 
-  return <>{user ? <Login /> : <p>static</p>}</>
+  return <>{user ? <Login /> : <Logout />}</>
 }
