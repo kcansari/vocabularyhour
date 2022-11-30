@@ -12,6 +12,8 @@ import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { useState, useEffect, useContext } from 'react'
 import AuthContext from '@/context/AuthContext.js'
+import Alert from '@mui/material/Alert'
+import Stack from '@mui/material/Stack'
 
 const theme = createTheme()
 
@@ -19,7 +21,7 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const { login } = useContext(AuthContext)
+  const { login, error } = useContext(AuthContext)
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -77,6 +79,7 @@ export default function Login() {
                 />
               </Grid>
             </Grid>
+            {error && <BasicAlerts error={error} />}
             <Button
               type='submit'
               fullWidth
@@ -108,5 +111,15 @@ function Copyright(props) {
       {new Date().getFullYear()}
       {'.'}
     </Typography>
+  )
+}
+
+function BasicAlerts({ error }) {
+  return (
+    <Stack sx={{ width: '100%', mt: 2 }} spacing={2}>
+      <Alert variant='outlined' severity='error'>
+        {error}
+      </Alert>
+    </Stack>
   )
 }

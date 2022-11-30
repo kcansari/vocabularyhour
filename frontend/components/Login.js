@@ -19,17 +19,24 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const router = useRouter()
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget)
+  const handleOpenNavMenu = (e) => {
+    setAnchorElNav(e.currentTarget)
+    e.preventDefault()
   }
 
   const handleCloseNavMenu = (e) => {
     setAnchorElNav(null)
     e.preventDefault()
-    if (e.target.id === 'Sign up') {
-      router.push(`/account/register`)
-    } else {
-      router.push(`/account/login`)
+    switch (e.target.id) {
+      case 'Sign up':
+        router.push(`/account/register`)
+        break
+      case 'Sign in':
+        router.push(`/account/login`)
+        break
+
+      default:
+        break
     }
   }
 

@@ -7,6 +7,7 @@ const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [error, setError] = useState(null)
+  const router = useRouter()
 
   // Login user
   const login = async ({ email, password }) => {
@@ -21,11 +22,18 @@ export const AuthProvider = ({ children }) => {
       }),
     })
     const data = await res.json()
-    console.log(data)
+    // console.log(data)
+    if (res.ok) {
+      setUser(data.user)
+      router.push('/about')
+    }
+    setError(data.message)
   }
 
   return (
-    <AuthContext.Provider value={{ login }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ login, user, error }}>
+      {children}
+    </AuthContext.Provider>
   )
 }
 
