@@ -7,6 +7,7 @@ const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [error, setError] = useState(null)
+
   const router = useRouter()
 
   // Login user
@@ -24,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     const data = await res.json()
     // console.log(data)
     if (res.ok) {
-      setUser(data.user)
+      setUser(data.name)
       router.push('/about')
     }
     setError(data.message)
