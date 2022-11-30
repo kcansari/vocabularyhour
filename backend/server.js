@@ -5,6 +5,7 @@ import connectDB from './config/db.js'
 import express from 'express'
 import dotenv from 'dotenv'
 import colors from 'colors'
+import cors from 'cors'
 const app = express()
 
 dotenv.config()
@@ -13,6 +14,8 @@ connectDB()
 
 // Allow us to accept JSON data in the body.
 app.use(express.json())
+//Enable All CORS Requests
+app.use(cors())
 
 app.get('/', (req, res) => {
   res.send('Vocabulary Hour')
