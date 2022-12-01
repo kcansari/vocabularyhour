@@ -30,7 +30,7 @@ export default function Login() {
   }
 
   return (
-    <Layout>
+    <Layout title={'User Login'}>
       <ThemeProvider theme={theme}>
         <Container component='main' maxWidth='xs'>
           <CssBaseline />
@@ -82,6 +82,18 @@ export default function Login() {
                 </Grid>
               </Grid>
               {error && <BasicAlerts error={error} />}
+              <Grid container justifyContent='flex-end' sx={{ marginTop: 2 }}>
+                <Grid item>
+                  Don't have an account?
+                  <Link
+                    href='/account/register'
+                    variant='body2'
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <strong> Sign up</strong>
+                  </Link>
+                </Grid>
+              </Grid>
               <Button
                 type='submit'
                 fullWidth
@@ -92,28 +104,10 @@ export default function Login() {
               </Button>
             </Box>
           </Box>
-          <Copyright sx={{ mt: 5 }} />
+          {/* <Copyright sx={{ mt: 5 }} /> */}
         </Container>
       </ThemeProvider>
     </Layout>
-  )
-}
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant='body2'
-      color='text.secondary'
-      align='center'
-      {...props}
-    >
-      {'Copyright © '}
-      <Link style={{ textDecoration: 'none', color: 'inherit' }} href='/'>
-        Vocabulary Hour
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
   )
 }
 
