@@ -1,7 +1,7 @@
-// import styles from '@/styles/Layout.module.css'
+import styles from '@/styles/Layout.module.css'
 import Head from 'next/head'
 import Header from './Header'
-// import Footer from './Footer'
+import Footer from './Footer'
 // import Showcase from './Showcase'
 import { useRouter } from 'next/router'
 
@@ -16,10 +16,9 @@ const Layout = ({ title, keywords, description, children }) => {
         <meta name='keywords' content={keywords} />
       </Head>
       <Header />
-      {children}
       {/* {router.pathname === '/' && <Showcase />} */}
-      {/* <div className={styles.container}>{children}</div> */}
-      {/* <Footer /> */}
+      <div className={styles.container}>{children}</div>
+      <Footer />
     </div>
   )
 }
