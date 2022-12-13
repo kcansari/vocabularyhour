@@ -18,6 +18,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Avatar from '@mui/material/Avatar'
 import Layout from '@/components/Layout.js'
+import AuthContext from '@/context/AuthContext.js'
+import { useState, useEffect, useContext } from 'react'
 import * as yup from 'yup'
 
 const theme = createTheme()
@@ -48,6 +50,8 @@ const validationSchema = yup
 export default function SignIn() {
   const [passwordVisibility, setPasswordVisibility] = React.useState(false)
 
+  const { registerUser } = useContext(AuthContext)
+
   const {
     register,
     handleSubmit,
@@ -57,6 +61,7 @@ export default function SignIn() {
   })
 
   const onSubmit = (data) => {
+    registerUser(data)
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve()
