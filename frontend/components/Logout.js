@@ -88,7 +88,7 @@ function ResponsiveAppBar() {
           </Typography>
 
           <Box
-            container
+            // container
             direction='row'
             justifyContent='flex-end'
             alignItems='center'
@@ -137,7 +137,7 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box
-            container
+            // container
             direction='row'
             justifyContent='flex-end'
             alignItems='center'

@@ -93,7 +93,7 @@ function ResponsiveAppBar() {
           </Typography>
 
           <Box
-            container
+            // container
             direction='row'
             justifyContent='flex-end'
             alignItems='center'
@@ -109,6 +109,7 @@ function ResponsiveAppBar() {
             >
               <MenuIcon />
             </IconButton>
+
             <Menu
               id='menu-appbar'
               anchorEl={anchorElNav}
@@ -144,7 +145,7 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box
-            container
+            // container
             direction='row'
             justifyContent='flex-end'
             alignItems='center'
