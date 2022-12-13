@@ -16,6 +16,7 @@
     "@mui/lab": "^5.0.0-alpha.111",
     "@mui/material": "^5.10.15",
     "@mui/styled-engine-sc": "^5.10.14",
+    "cookie": "^0.5.0",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
     "next": "13.0.5",
