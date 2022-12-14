@@ -10,28 +10,35 @@ import Container from '@mui/material/Container'
 import Link from 'next/link'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
+import { useRouter } from 'next/router'
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
 
 const pages = ['Profile', 'Logout']
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
+  const router = useRouter()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget)
   }
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget)
-  }
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (e) => {
     setAnchorElNav(null)
-  }
+    e.preventDefault()
+    console.log(e.target.id)
+    switch (e.target.id) {
+      case 'Profile':
+        router.push(`/account/profile`)
+        break
+      case 'Logout':
+        router.push(`/`)
+        break
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null)
+      default:
+        break
+    }
   }
 
   return (
@@ -128,6 +135,8 @@ function ResponsiveAppBar() {
                     textAlign='center'
                     color={page === 'Logout' ? 'error' : 'black'}
                     variant='contained'
+                    type='submit'
+                    id={page}
                   >
                     {page}
                   </Typography>
@@ -151,6 +160,8 @@ function ResponsiveAppBar() {
                 size={page === 'Logout' ? 'small' : 'large'}
                 variant={page === 'Logout' ? 'contained' : 'none'}
                 color='error'
+                type='submit'
+                id={page}
               >
                 {page}
               </Button>
