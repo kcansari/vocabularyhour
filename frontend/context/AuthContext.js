@@ -10,6 +10,10 @@ export const AuthProvider = ({ children }) => {
 
   const router = useRouter()
 
+  useEffect(() => {
+    checkUserLoggedIn()
+  }, [])
+
   // Login user
   const login = async ({ email, password }) => {
     const res = await fetch(`${LOCAL_URL}/api/login`, {
@@ -28,7 +32,7 @@ export const AuthProvider = ({ children }) => {
     if (res.ok) {
       setUser(data.user)
       setError(null)
-      console.log('succesful login')
+      router.push('/account/profile')
     } else {
       setError(data.message)
     }
@@ -37,6 +41,18 @@ export const AuthProvider = ({ children }) => {
   // Register
   const registerUser = async (user) => {
     console.log(user)
+  }
+
+  // Check if user is logged in
+  const checkUserLoggedIn = async (user) => {
+    const res = await fetch(`${LOCAL_URL}/api/user`)
+    const data = await res.json()
+
+    if (res.ok) {
+      setUser(data.name)
+    } else {
+      setUser(null)
+    }
   }
 
   return (
