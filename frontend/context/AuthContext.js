@@ -43,6 +43,17 @@ export const AuthProvider = ({ children }) => {
     console.log(user)
   }
 
+  //logout user
+  const logout = async () => {
+    const res = await fetch(`${LOCAL_URL}/api/logout`, {
+      method: 'POST',
+    })
+    if (res.ok) {
+      setUser(null)
+      router.push('/')
+    }
+  }
+
   // Check if user is logged in
   const checkUserLoggedIn = async (user) => {
     const res = await fetch(`${LOCAL_URL}/api/user`)
@@ -56,7 +67,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ login, user, error, registerUser }}>
+    <AuthContext.Provider value={{ login, user, error, registerUser, logout }}>
       {children}
     </AuthContext.Provider>
   )
