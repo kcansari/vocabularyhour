@@ -8,9 +8,11 @@ import Menu from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu'
 import Container from '@mui/material/Container'
 import Link from 'next/link'
+import AuthContext from '@/context/AuthContext.js'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import { useRouter } from 'next/router'
+import { useState, useEffect, useContext } from 'react'
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
 
 const pages = ['Profile', 'Logout']
@@ -19,6 +21,7 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const router = useRouter()
+  const { logout } = useContext(AuthContext)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget)
@@ -27,13 +30,12 @@ function ResponsiveAppBar() {
   const handleCloseNavMenu = (e) => {
     setAnchorElNav(null)
     e.preventDefault()
-    console.log(e.target.id)
     switch (e.target.id) {
       case 'Profile':
         router.push(`/account/profile`)
         break
       case 'Logout':
-        router.push(`/`)
+        logout()
         break
 
       default:
