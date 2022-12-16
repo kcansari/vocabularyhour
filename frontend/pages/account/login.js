@@ -1,6 +1,10 @@
 import * as React from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
 import Link from 'next/link'
@@ -10,7 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useContext } from 'react'
 import AuthContext from '@/context/AuthContext.js'
 import Alert from '@mui/material/Alert'
 import Stack from '@mui/material/Stack'
@@ -22,8 +26,13 @@ const theme = createTheme()
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [passwordVisibility, setPasswordVisibility] = React.useState(false)
 
   const { login, error, isSubmitting } = useContext(AuthContext)
+
+  const handleClickShowPassword = () => {
+    setPasswordVisibility(!passwordVisibility)
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -74,16 +83,42 @@ export default function Login() {
                     fullWidth
                     name='password'
                     label='Password'
-                    type='password'
                     id='password'
                     autoComplete='new-password'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    type={passwordVisibility ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          {' '}
+                          <IconButton
+                            onClick={handleClickShowPassword}
+                            edge='end'
+                          >
+                            {passwordVisibility ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
               </Grid>
               {error && <BasicAlerts error={error} />}
-              <Grid container justifyContent='flex-end' sx={{ marginTop: 2 }}>
+              <Grid container sx={{ marginTop: 2 }}>
+                <Grid item xs>
+                  <Link
+                    href='/account/forgotpassword'
+                    variant='body2'
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Forgot password?
+                  </Link>
+                </Grid>
                 <Grid item>
                   Don't have an account?
                   <Link
@@ -106,7 +141,6 @@ export default function Login() {
               </LoadingButton>
             </Box>
           </Box>
-          {/* <Copyright sx={{ mt: 5 }} /> */}
         </Container>
       </ThemeProvider>
     </Layout>
