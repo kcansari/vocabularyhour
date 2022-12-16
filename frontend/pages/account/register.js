@@ -7,6 +7,8 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
+import Alert from '@mui/material/Alert'
+import Stack from '@mui/material/Stack'
 import Link from 'next/link'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
@@ -50,23 +52,18 @@ const validationSchema = yup
 export default function SignIn() {
   const [passwordVisibility, setPasswordVisibility] = React.useState(false)
 
-  const { registerUser } = useContext(AuthContext)
+  const { registerUser, error, isSubmitting } = useContext(AuthContext)
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
   })
 
   const onSubmit = (data) => {
     registerUser(data)
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
   }
 
   const handleClickShowPassword = () => {
@@ -150,6 +147,7 @@ export default function SignIn() {
                 error={errors.confirmPassword ? true : false}
                 helperText={errors.confirmPassword?.message}
               />
+              {error && <BasicAlerts error={error} />}
               <Grid container justifyContent='flex-end' sx={{ marginTop: 2 }}>
                 <Grid item>
                   Already have an account?
@@ -176,5 +174,15 @@ export default function SignIn() {
         </Container>
       </ThemeProvider>
     </Layout>
+  )
+}
+
+function BasicAlerts({ error }) {
+  return (
+    <Stack sx={{ width: '100%', mt: 2 }} spacing={2}>
+      <Alert variant='outlined' severity='error'>
+        {error}
+      </Alert>
+    </Stack>
   )
 }
