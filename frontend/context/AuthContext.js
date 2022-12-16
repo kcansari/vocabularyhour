@@ -7,6 +7,7 @@ const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [error, setError] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const router = useRouter()
 
@@ -26,21 +27,51 @@ export const AuthProvider = ({ children }) => {
         password,
       }),
     })
+    setIsSubmitting(true)
 
     const data = await res.json()
     // console.log(data)
     if (res.ok) {
-      setUser(data.user)
-      setError(null)
+      setTimeout(() => {
+        setUser(data.user)
+        setError(null)
+        setIsSubmitting(false)
+      }, 1000)
       router.push('/account/profile')
     } else {
-      setError(data.message)
+      setTimeout(() => {
+        setIsSubmitting(false)
+        setError(data.message)
+      }, 1000)
     }
   }
 
   // Register
   const registerUser = async (user) => {
-    console.log(user)
+    const res = await fetch(`${LOCAL_URL}/api/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+    setIsSubmitting(true)
+
+    const data = await res.json()
+    // console.log(data)
+    if (res.ok) {
+      setTimeout(() => {
+        setUser(data.user)
+        setError(null)
+        setIsSubmitting(false)
+      }, 1000)
+      router.push('/account/profile')
+    } else {
+      setTimeout(() => {
+        setIsSubmitting(false)
+        setError(data.message)
+      }, 1000)
+    }
   }
 
   //logout user
@@ -67,7 +98,9 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ login, user, error, registerUser, logout }}>
+    <AuthContext.Provider
+      value={{ login, user, error, registerUser, logout, isSubmitting }}
+    >
       {children}
     </AuthContext.Provider>
   )
