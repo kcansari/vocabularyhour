@@ -15,6 +15,7 @@ import AuthContext from '@/context/AuthContext.js'
 import Alert from '@mui/material/Alert'
 import Stack from '@mui/material/Stack'
 import Layout from '@/components/Layout.js'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 const theme = createTheme()
 
@@ -22,7 +23,7 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const { login, error } = useContext(AuthContext)
+  const { login, error, isSubmitting } = useContext(AuthContext)
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -94,14 +95,15 @@ export default function Login() {
                   </Link>
                 </Grid>
               </Grid>
-              <Button
+              <LoadingButton
                 type='submit'
                 fullWidth
+                loading={isSubmitting}
                 variant='contained'
                 sx={{ mt: 3, mb: 2 }}
               >
                 Sign in
-              </Button>
+              </LoadingButton>
             </Box>
           </Box>
           {/* <Copyright sx={{ mt: 5 }} /> */}
