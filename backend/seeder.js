@@ -5,6 +5,7 @@ import words from './data/words.js'
 import users from './data/users.js'
 import Word from './models/wordModel.js'
 import User from './models/userModel.js'
+import MailToken from './models/tokenModel.js'
 import connectDB from './config/db.js'
 
 dotenv.config()
@@ -14,6 +15,7 @@ const importData = async () => {
   try {
     await Word.deleteMany()
     await User.deleteMany()
+    await MailToken.deleteMany()
 
     const createdUsers = await User.insertMany(users)
 
@@ -24,6 +26,7 @@ const importData = async () => {
     })
 
     await Word.insertMany(sampleWords)
+    MailToken.insertMany()
 
     console.log('Data Imported'.green.inverse)
     process.exit()
@@ -37,6 +40,7 @@ const destroyData = async () => {
   try {
     await Word.deleteMany()
     await User.deleteMany()
+    await MailToken.deleteMany()
 
     console.log('Data Destroyed!'.red.inverse)
     process.exit()
