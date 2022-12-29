@@ -28,7 +28,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [passwordVisibility, setPasswordVisibility] = React.useState(false)
 
-  const { login, error, isSubmitting } = useContext(AuthContext)
+  const { login, loginError, isSubmitting } = useContext(AuthContext)
 
   const handleClickShowPassword = () => {
     setPasswordVisibility(!passwordVisibility)
@@ -108,7 +108,7 @@ export default function Login() {
                   />
                 </Grid>
               </Grid>
-              {error && <BasicAlerts error={error} />}
+              {loginError && <BasicAlerts error={loginError} />}
               <Grid container sx={{ marginTop: 2 }}>
                 <Grid item xs>
                   <Link

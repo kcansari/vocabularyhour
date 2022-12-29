@@ -52,7 +52,7 @@ const validationSchema = yup
 export default function SignIn() {
   const [passwordVisibility, setPasswordVisibility] = React.useState(false)
 
-  const { registerUser, error, isSubmitting } = useContext(AuthContext)
+  const { registerUser, registerError, isSubmitting } = useContext(AuthContext)
 
   const {
     register,
@@ -147,7 +147,7 @@ export default function SignIn() {
                 error={errors.confirmPassword ? true : false}
                 helperText={errors.confirmPassword?.message}
               />
-              {error && <BasicAlerts error={error} />}
+              {registerError && <BasicAlerts error={registerError} />}
               <Grid container justifyContent='flex-end' sx={{ marginTop: 2 }}>
                 <Grid item>
                   Already have an account?
