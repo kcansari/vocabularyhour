@@ -6,7 +6,8 @@ const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const [error, setError] = useState(null)
+  const [loginError, setLoginError] = useState(null)
+  const [registerError, setRegisterError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const router = useRouter()
@@ -34,14 +35,14 @@ export const AuthProvider = ({ children }) => {
     if (res.ok) {
       setTimeout(() => {
         setUser(data.user)
-        setError(null)
+        setLoginError(null)
         setIsSubmitting(false)
       }, 1000)
       router.push('/account/profile')
     } else {
       setTimeout(() => {
         setIsSubmitting(false)
-        setError(data.message)
+        setLoginError(data.message)
       }, 1000)
     }
   }
@@ -62,14 +63,14 @@ export const AuthProvider = ({ children }) => {
     if (res.ok) {
       setTimeout(() => {
         setUser(data.user)
-        setError(null)
+        setRegisterError(null)
         setIsSubmitting(false)
       }, 1000)
       router.push('/account/profile')
     } else {
       setTimeout(() => {
         setIsSubmitting(false)
-        setError(data.message)
+        setRegisterError(data.message)
       }, 1000)
     }
   }
@@ -99,7 +100,15 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ login, user, error, registerUser, logout, isSubmitting }}
+      value={{
+        login,
+        user,
+        loginError,
+        registerError,
+        registerUser,
+        logout,
+        isSubmitting,
+      }}
     >
       {children}
     </AuthContext.Provider>
