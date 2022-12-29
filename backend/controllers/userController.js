@@ -12,22 +12,6 @@ const authUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email })
 
-  if (!user.verified) {
-    let token = await MailToken.findOne({ user: user._id })
-    if (!token) {
-      await MailToken.create({
-        user: user._id,
-        token: generateToken(user._id),
-      }).save()
-
-      const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`
-      await sendEmail(user.email, 'Verify Email', url)
-    }
-    return res
-      .status(400)
-      .send({ message: 'An email sent to your account please verify.' })
-  }
-
   if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,
@@ -104,6 +88,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     name: user.name,
     email: user.email,
     isAdmin: user.isAdmin,
+    verified: user.verified,
   })
 })
 
@@ -217,6 +202,40 @@ const verifyUser = asyncHandler(async (req, res) => {
   res.status(200).send({ message: 'Email verified successfully' })
 })
 
+// @desc Get resend user verify link
+// @route GET /api/users/resend/:id
+// @access Private
+const resendVerifyLink = asyncHandler(async (req, res) => {
+  const user = await User.findOne({ _id: req.params.id })
+  const token = await MailToken.findOne({ user: req.params.id })
+
+  // remove the previous token to send new token
+  if (token) {
+    await token.remove()
+  }
+
+  const mailtoken = await MailToken.create({
+    user: user._id,
+    token: generateToken(user._id),
+  })
+
+  if (user && mailtoken) {
+    const url = `${process.env.BASE_URL}api/users/${user.id}/verify/${mailtoken.token}`
+    let resMail = await sendEmail(user.email, 'Verify Email', url)
+    if (resMail) {
+      // this shows to us there is an error so transmit the error client side
+      res.status(400)
+      throw new Error(resMail)
+    }
+    res
+      .status(201)
+      .send({ message: 'An email sent to your account please verify.' })
+  } else {
+    res.status(400)
+    throw new Error('Invalid user data')
+  }
+})
+
 export {
   authUser,
   getUserProfile,
@@ -227,4 +246,5 @@ export {
   getUserById,
   updateUser,
   verifyUser,
+  resendVerifyLink,
 }
