@@ -17,7 +17,7 @@ const Profile = ({ user, token }) => {
   const submitHandler = async (e) => {
     e.preventDefault()
     setLinearProgress(true)
-    const backendRes = await fetch(`${API_URL}/api/users/resend/${user._id}`, {
+    const backendRes = await fetch(`${API_URL}/verify/resend/${user._id}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
