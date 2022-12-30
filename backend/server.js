@@ -1,6 +1,7 @@
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import wordRoutes from './routes/wordRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+import verifyRoutes from './routes/verifyRoutes.js'
 import connectDB from './config/db.js'
 import express from 'express'
 import dotenv from 'dotenv'
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/words', wordRoutes)
 app.use('/api/users', userRoutes)
+app.use('/verify', verifyRoutes)
 app.use(notFound)
 app.use(errorHandler)
 
