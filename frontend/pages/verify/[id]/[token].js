@@ -1,33 +1,48 @@
 import { useRouter } from 'next/router'
+import { API_URL } from '@/config/index'
+import Layout from '@/components/Layout'
+import Alert from '@mui/material/Alert'
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
 
-export default function CommentPage() {
+export default function CommentPage({ data }) {
   const router = useRouter()
-  const { id, token } = router.query
+  const { id } = router.query
 
   return (
-    <>
-      <h1>User id: {id}</h1>
-      <h1>User token: {token}</h1>
-    </>
+    <Layout title={'User verify page'}>
+      <Container maxWidth='xs'>
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          {data.message === 'Email verified successfully' ? (
+            <Alert variant='filled' severity='success'>
+              {data.message}, please sign in your account
+            </Alert>
+          ) : (
+            <Alert variant='filled' severity='error'>
+              {data.message}, please check your verify link
+            </Alert>
+          )}
+        </Box>
+      </Container>
+    </Layout>
   )
 }
 
 export async function getServerSideProps({ query: { id, token } }) {
-  const { token } = parseCookies(req)
-  //to do it doesnt work.
-  const res = await fetch(`${API_URL}/verify/${id}/${token}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+  const res = await fetch(`${API_URL}/verify/${id}/${token}`)
 
-  const user = await res.json()
+  const data = await res.json()
 
   return {
     props: {
-      user,
-      token,
+      data: data,
     },
   }
 }
