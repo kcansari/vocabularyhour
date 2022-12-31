@@ -61,12 +61,12 @@ export const AuthProvider = ({ children }) => {
     const data = await res.json()
     // console.log(data)
     if (res.ok) {
+      router.push('/account/profile')
       setTimeout(() => {
         setUser(data.user)
         setRegisterError(null)
         setIsSubmitting(false)
-      }, 1000)
-      router.push('/account/profile')
+      }, 8000)
     } else {
       setTimeout(() => {
         setIsSubmitting(false)
