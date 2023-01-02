@@ -98,6 +98,11 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  // Forgot password
+  const forgotPassword = async (email) => {
+    console.log(email)
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -108,6 +113,7 @@ export const AuthProvider = ({ children }) => {
         registerUser,
         logout,
         isSubmitting,
+        forgotPassword,
       }}
     >
       {children}
