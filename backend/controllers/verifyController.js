@@ -63,4 +63,53 @@ const resendVerifyLink = asyncHandler(async (req, res) => {
   }
 })
 
-export { verifyUser, resendVerifyLink }
+// @desc GET send forgot password link
+// @route GET /verify/forgotpassword/:email
+// @access Public
+const sendForgotPasswordLink = asyncHandler(async (req, res) => {
+  const user = await User.findOne({ email: req.params.email }).select(
+    '-password -isAdmin -createdAt -updatedAt -__v'
+  )
+
+  if (!user) {
+    res.status(201).send({ message: 'This email address is not found' })
+  }
+
+  const { _id, email, verified } = user
+
+  if (!verified) {
+    res.status(201).send({ message: 'Please verify your account' })
+  }
+
+  // After all controls, link will be send to user.
+  // if there is a token which belongs to user, will be delete to clear db.
+  const token = await MailToken.findOne({ user: _id })
+
+  if (token) {
+    await token.remove()
+  }
+
+  // create new token to send forgot password link.
+  const mailtoken = await MailToken.create({
+    user: user._id,
+    token: generateToken(user._id),
+  })
+
+  if (user && mailtoken) {
+    const url = `${process.env.BASE_URL}verify/forgotpassword/${mailtoken.token}`
+    let resMail = await sendEmail(email, 'Reset your password', url)
+    if (resMail) {
+      // this shows to us there is an error so transmit the error client side
+      res.status(400)
+      throw new Error(resMail)
+    }
+    res
+      .status(201)
+      .send({ message: `An email sent to reset your password and link ${url}` })
+  } else {
+    res.status(400)
+    throw new Error('Invalid user data')
+  }
+})
+
+export { verifyUser, resendVerifyLink, sendForgotPasswordLink }
