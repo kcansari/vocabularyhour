@@ -19,10 +19,10 @@ const sendEmail = async (email, subject, text) => {
       to: email, // list of receivers
       subject: subject, // Subject line
       text: text, // plain text body
-      html:
-        "To verify your account, click this <a href='" +
-        text +
-        "'> <b>link</b></a>", // html body
+      html: `<a href=${text}>
+      
+          <b>${subject}</b>
+        </a>`, // html body
     })
   } catch (error) {
     return error
