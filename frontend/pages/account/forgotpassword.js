@@ -11,13 +11,13 @@ import Stack from '@mui/material/Stack'
 import Alert from '@mui/material/Alert'
 import IconButton from '@mui/material/IconButton'
 import Collapse from '@mui/material/Collapse'
-
 import CloseIcon from '@mui/icons-material/Close'
 
+import AuthContext from '@/context/AuthContext.js'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 
 const emailRegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 const validationSchema = yup
@@ -33,19 +33,25 @@ export default function Forgotpassword() {
   const [showMessage, setMessage] = useState(false)
   const [open, setOpen] = useState(true)
 
+  const { forgotPassword } = useContext(AuthContext)
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
   })
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data, e) => {
     if (data.email) {
       setMessage(true)
       setOpen(true)
-      console.log(data.email)
+
+      e.target.reset() // reset after form submit
+
+      forgotPassword(data.email)
     }
   }
 
@@ -82,29 +88,31 @@ export default function Forgotpassword() {
                   width: 1 / 2,
                 }}
               ></Divider>
-              <Typography variant='subtitle2' mt={1} gutterBottom='true'>
-                {"we'll " + 'send you a link to reset your password'}
-              </Typography>
-              <Stack spacing={2} direction='row' mt={2} mb={2}>
-                <TextField
-                  required
-                  fullWidth
-                  id='email'
-                  label='Email Address'
-                  name='email'
-                  autoComplete='email'
-                  {...register('email')}
-                  error={errors.email ? true : false}
-                  helperText={errors.email?.message}
-                />
-                <Button
-                  variant='contained'
-                  type='submit'
-                  onClick={handleSubmit(onSubmit)}
-                >
-                  Send
-                </Button>
-              </Stack>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Typography variant='subtitle2' mt={1} gutterBottom='true'>
+                  {"we'll " + 'send you a link to reset your password'}
+                </Typography>
+                <Stack spacing={2} direction='row' mt={2} mb={2}>
+                  <TextField
+                    required
+                    fullWidth
+                    id='email'
+                    label='Email Address'
+                    name='email'
+                    autoComplete='email'
+                    {...register('email')}
+                    error={errors.email ? true : false}
+                    helperText={errors.email?.message}
+                  />
+                  <Button
+                    variant='contained'
+                    type='submit'
+                    onClick={() => reset()}
+                  >
+                    Send
+                  </Button>
+                </Stack>
+              </form>
               {showMessage ? (
                 <Collapse in={open}>
                   <Alert
