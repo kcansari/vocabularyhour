@@ -100,7 +100,17 @@ export const AuthProvider = ({ children }) => {
 
   // Forgot password
   const forgotPassword = async (email) => {
-    console.log(email)
+    const res = await fetch(`${LOCAL_URL}/api/forgotpassword`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+      }),
+    })
+    const data = await res.json()
+    console.log(data)
   }
 
   return (
