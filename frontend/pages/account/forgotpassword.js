@@ -17,7 +17,7 @@ import AuthContext from '@/context/AuthContext.js'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 
 const emailRegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 const validationSchema = yup
@@ -39,21 +39,25 @@ export default function Forgotpassword() {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState,
+    formState: { errors, isSubmitSuccessful },
   } = useForm({
     resolver: yupResolver(validationSchema),
   })
 
-  const onSubmit = async (data, e) => {
+  const onSubmit = async (data) => {
     if (data.email) {
       setMessage(true)
       setOpen(true)
-
-      e.target.reset() // reset after form submit
-
       forgotPassword(data.email)
     }
   }
+
+  useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      reset({ email: '' })
+    }
+  }, [formState, reset])
 
   return (
     <Layout title={'Forgot password'}>
@@ -104,11 +108,7 @@ export default function Forgotpassword() {
                     error={errors.email ? true : false}
                     helperText={errors.email?.message}
                   />
-                  <Button
-                    variant='contained'
-                    type='submit'
-                    onClick={() => reset()}
-                  >
+                  <Button variant='contained' type='submit'>
                     Send
                   </Button>
                 </Stack>
