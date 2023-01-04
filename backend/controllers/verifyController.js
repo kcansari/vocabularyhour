@@ -103,9 +103,7 @@ const sendForgotPasswordLink = asyncHandler(async (req, res) => {
       res.status(400)
       throw new Error(resMail)
     }
-    res
-      .status(201)
-      .send({ message: `An email sent to reset your password and link ${url}` })
+    res.status(201).send({ message: `An email sent to reset your password ` })
   } else {
     res.status(400)
     throw new Error('Invalid user data')
