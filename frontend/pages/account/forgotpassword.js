@@ -30,10 +30,9 @@ const validationSchema = yup
   .required()
 
 export default function Forgotpassword() {
-  const [showMessage, setMessage] = useState(false)
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
-  const { forgotPassword } = useContext(AuthContext)
+  const { forgotPassword, respondForgotPassword } = useContext(AuthContext)
 
   const {
     register,
@@ -47,9 +46,8 @@ export default function Forgotpassword() {
 
   const onSubmit = async (data) => {
     if (data.email) {
-      setMessage(true)
-      setOpen(true)
       forgotPassword(data.email)
+      setOpen(true)
     }
   }
 
@@ -93,7 +91,7 @@ export default function Forgotpassword() {
                 }}
               ></Divider>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <Typography variant='subtitle2' mt={1} gutterBottom='true'>
+                <Typography variant='subtitle2' mt={1}>
                   {"we'll " + 'send you a link to reset your password'}
                 </Typography>
                 <Stack spacing={2} direction='row' mt={2} mb={2}>
@@ -113,29 +111,30 @@ export default function Forgotpassword() {
                   </Button>
                 </Stack>
               </form>
-              {showMessage ? (
-                <Collapse in={open}>
-                  <Alert
-                    action={
-                      <IconButton
-                        aria-label='close'
-                        color='inherit'
-                        size='small'
-                        onClick={() => {
-                          setOpen(false)
-                        }}
-                      >
-                        <CloseIcon fontSize='inherit' />
-                      </IconButton>
-                    }
-                    sx={{ mb: 2 }}
-                  >
-                    We've sent your password reset link
-                  </Alert>
-                </Collapse>
-              ) : (
-                ''
-              )}
+              <Collapse in={open}>
+                <Alert
+                  severity={
+                    respondForgotPassword === 'This email address is not found'
+                      ? 'error'
+                      : 'success'
+                  }
+                  action={
+                    <IconButton
+                      aria-label='close'
+                      color='inherit'
+                      size='small'
+                      onClick={() => {
+                        setOpen(false)
+                      }}
+                    >
+                      <CloseIcon fontSize='inherit' />
+                    </IconButton>
+                  }
+                  sx={{ mb: 2 }}
+                >
+                  {open && respondForgotPassword}
+                </Alert>
+              </Collapse>
             </Grid>
           </Paper>
         </Box>
