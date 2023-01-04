@@ -10,9 +10,9 @@ export default async (req, res) => {
         method: 'GET',
       }
     )
-    const message = await backendRes.json()
+    const result = await backendRes.json()
     if (backendRes.ok) {
-      res.status(200).json({ message })
+      res.status(200).json({ result })
     } else {
       res.status(403).json({ message: 'User forbidden' })
     }
