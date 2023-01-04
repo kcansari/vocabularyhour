@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loginError, setLoginError] = useState(null)
   const [registerError, setRegisterError] = useState(null)
+  const [respondForgotPassword, setRespondForgotPassword] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const router = useRouter()
@@ -110,7 +111,14 @@ export const AuthProvider = ({ children }) => {
       }),
     })
     const data = await res.json()
-    console.log(data)
+
+    if (res.ok) {
+      setRespondForgotPassword(data.result.message)
+    } else {
+      setRespondForgotPassword(
+        'There is an error, please try again after a while later'
+      )
+    }
   }
 
   return (
@@ -124,6 +132,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         isSubmitting,
         forgotPassword,
+        respondForgotPassword,
       }}
     >
       {children}
