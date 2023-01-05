@@ -66,7 +66,10 @@ const registerUser = asyncHandler(async (req, res) => {
     }
     res
       .status(201)
-      .send({ message: 'An email sent to your account please verify.' })
+      .send({
+        message: 'An email sent to your account please verify.',
+        token: generateToken(user._id),
+      })
   } else {
     res.status(400)
     throw new Error('Invalid user data')
@@ -112,6 +115,33 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
       token: generateToken(updatedUser._id),
+    })
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
+// @desc Update user password
+// @route PUT /api/users/reset-password/:mailtoken
+// @access Private
+const changeUserPassword = asyncHandler(async (req, res) => {
+  const tokenModel = await MailToken.findOne({ token: req.params.mailtoken })
+  const user = await User.findById(tokenModel.user)
+  if (!tokenModel) {
+    res.status(404)
+    throw new Error('Invalid token')
+  }
+  if (user) {
+    if (req.body.password) {
+      user.password = req.body.password
+    }
+
+    const updatedUser = await user.save()
+    res.json({
+      email: updatedUser.email,
+      password: updatedUser.password,
+      message: 'Your password has been changed successfully',
     })
   } else {
     res.status(404)
@@ -186,4 +216,5 @@ export {
   updateUserProfile,
   getUserById,
   updateUser,
+  changeUserPassword,
 }
