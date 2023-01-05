@@ -71,7 +71,7 @@ export default function SignIn() {
   }
 
   return (
-    <Layout>
+    <Layout title={'Register Page'}>
       <ThemeProvider theme={theme}>
         <Container component='main' maxWidth='xs'>
           <CssBaseline />
