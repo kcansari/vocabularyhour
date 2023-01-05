@@ -12,6 +12,9 @@ import Alert from '@mui/material/Alert'
 import IconButton from '@mui/material/IconButton'
 import Collapse from '@mui/material/Collapse'
 import CloseIcon from '@mui/icons-material/Close'
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
+import LinearProgress from '@mui/material/LinearProgress'
 
 import AuthContext from '@/context/AuthContext.js'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -30,9 +33,14 @@ const validationSchema = yup
   .required()
 
 export default function Forgotpassword() {
-  const [open, setOpen] = useState(false)
-
-  const { forgotPassword, respondForgotPassword } = useContext(AuthContext)
+  const {
+    forgotPassword,
+    respondForgotPassword,
+    openBackdrop,
+    setOpenBackdrop,
+    openMessage,
+    setOpenMessage,
+  } = useContext(AuthContext)
 
   const {
     register,
@@ -47,7 +55,7 @@ export default function Forgotpassword() {
   const onSubmit = async (data) => {
     if (data.email) {
       forgotPassword(data.email)
-      setOpen(true)
+      setOpenBackdrop(true)
     }
   }
 
@@ -111,7 +119,7 @@ export default function Forgotpassword() {
                   </Button>
                 </Stack>
               </form>
-              <Collapse in={open}>
+              <Collapse in={openMessage}>
                 <Alert
                   severity={
                     respondForgotPassword === 'This email address is not found'
@@ -124,7 +132,7 @@ export default function Forgotpassword() {
                       color='inherit'
                       size='small'
                       onClick={() => {
-                        setOpen(false)
+                        setOpenMessage(false)
                       }}
                     >
                       <CloseIcon fontSize='inherit' />
@@ -132,13 +140,19 @@ export default function Forgotpassword() {
                   }
                   sx={{ mb: 2 }}
                 >
-                  {open && respondForgotPassword}
+                  {openMessage && respondForgotPassword}
                 </Alert>
               </Collapse>
             </Grid>
           </Paper>
         </Box>
       </Container>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={openBackdrop}
+      >
+        <CircularProgress color='inherit' />
+      </Backdrop>
     </Layout>
   )
 }
