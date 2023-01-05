@@ -10,6 +10,8 @@ export const AuthProvider = ({ children }) => {
   const [registerError, setRegisterError] = useState(null)
   const [respondForgotPassword, setRespondForgotPassword] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [openMessage, setOpenMessage] = useState(false)
+  const [openBackdrop, setOpenBackdrop] = useState(false)
 
   const router = useRouter()
 
@@ -111,9 +113,12 @@ export const AuthProvider = ({ children }) => {
       }),
     })
     const data = await res.json()
+    // show message and circular progress.
 
     if (res.ok) {
       setRespondForgotPassword(data.result.message)
+      setOpenBackdrop(false)
+      setOpenMessage(true)
     } else {
       setRespondForgotPassword(
         'There is an error, please try again after a while later'
@@ -133,6 +138,10 @@ export const AuthProvider = ({ children }) => {
         isSubmitting,
         forgotPassword,
         respondForgotPassword,
+        openBackdrop,
+        setOpenBackdrop,
+        openMessage,
+        setOpenMessage,
       }}
     >
       {children}
