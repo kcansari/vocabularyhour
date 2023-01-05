@@ -9,12 +9,14 @@ import {
   updateUserProfile,
   getUserById,
   updateUser,
+  changeUserPassword,
 } from '../controllers/userController.js'
 
 const router = express.Router()
 
 router.post('/login', authUser)
 router.route('/').post(registerUser).get(protect, admin, getUsers)
+router.route('/reset-password/:mailtoken').put(changeUserPassword)
 
 router
   .route('/profile')
