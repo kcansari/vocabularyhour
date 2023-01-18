@@ -6,6 +6,7 @@ import users from './data/users.js'
 import Word from './models/wordModel.js'
 import User from './models/userModel.js'
 import MailToken from './models/tokenModel.js'
+import WordCollection from './models/wordCollectionModel.js'
 import connectDB from './config/db.js'
 
 dotenv.config()
@@ -16,16 +17,25 @@ const importData = async () => {
     await Word.deleteMany()
     await User.deleteMany()
     await MailToken.deleteMany()
+    await WordCollection.deleteMany()
 
     const createdUsers = await User.insertMany(users)
+    const createdWords = await Word.insertMany(words)
 
     const adminUser = createdUsers[0]._id
+    const allWordId = createdWords.map((createdWord) => createdWord._id)
 
-    const sampleWords = words.map((word) => {
-      return { ...word, user: adminUser }
+    const sampleCollection = [
+      {
+        userId: adminUser,
+        words: allWordId,
+      },
+    ]
+
+    await WordCollection.insertMany(sampleCollection).catch(function (error) {
+      console.log(error)
     })
 
-    await Word.insertMany(sampleWords)
     MailToken.insertMany()
 
     console.log('Data Imported'.green.inverse)
