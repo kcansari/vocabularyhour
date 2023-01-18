@@ -4,11 +4,6 @@ const wordSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     meaning: { type: String, required: true },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'User',
-    },
   },
   {
     // If you set timestamps: true, Mongoose will add two properties of type Date to your schema:
