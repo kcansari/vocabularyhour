@@ -27,6 +27,7 @@ const importData = async () => {
 
     const sampleCollection = [
       {
+        name: 'Admin Collection',
         userId: adminUser,
         words: allWordId,
       },

@@ -3,6 +3,7 @@ const { Schema } = mongoose
 
 const wordCollectionSchema = new mongoose.Schema(
   {
+    name: { type: String, required: true },
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
     words: [{ type: Schema.Types.ObjectId, ref: 'Word' }],
   },
