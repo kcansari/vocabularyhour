@@ -5,6 +5,7 @@ import {
   getUserCollections,
   addNewWordToCollection,
   deleteCollection,
+  removeWordFromCollection,
 } from '../controllers/wordCollectionController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
@@ -17,5 +18,8 @@ router.route('/add/:collectionId').put(protect, addNewWordToCollection)
 router
   .route('/delete/collection/:collectionId')
   .delete(protect, deleteCollection)
+router
+  .route('/delete/word/:collectionId')
+  .put(protect, removeWordFromCollection)
 
 export default router

@@ -69,7 +69,7 @@ const addNewWordToCollection = asyncHandler(async (req, res) => {
   res.json(updatedCollection)
 })
 
-// @desc Delete a specific word collection
+// @desc Delete a specific collection
 // @route Delete /wordcollection/delete/collection/:collectionId
 // @access Private
 const deleteCollection = asyncHandler(async (req, res) => {
@@ -78,10 +78,30 @@ const deleteCollection = asyncHandler(async (req, res) => {
   res.json({ message: 'Collection was deleted', data: collection })
 })
 
+// @desc Remove a specific word from collection however the word still in db.
+// @route PUT /wordcollection/delete/word/:collectionId
+// @access Private
+const removeWordFromCollection = asyncHandler(async (req, res) => {
+  const { collectionId } = req.params
+  const { word } = req.body
+  const wordId = await Word.findOne({ name: word }).select('_id')
+
+  const updatedCollection = await WordCollection.findByIdAndUpdate(
+    collectionId,
+    { $pull: { words: { $in: [wordId] } } },
+    { new: true }
+  )
+  res.json({
+    message: `${word} was removed from collection`,
+    data: { updatedCollection, collectionId },
+  })
+})
+
 export {
   getCollections,
   createCollection,
   getUserCollections,
   addNewWordToCollection,
   deleteCollection,
+  removeWordFromCollection,
 }
