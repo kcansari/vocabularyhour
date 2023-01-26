@@ -11,7 +11,7 @@ import connectDB from './config/db.js'
 
 dotenv.config()
 connectDB()
-
+// basicSchemaModel Branch
 const importData = async () => {
   try {
     await Word.deleteMany()
