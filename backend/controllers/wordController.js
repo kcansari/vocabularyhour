@@ -1,50 +1,45 @@
-import Word from '../models/wordModel.js'
+import User from '../models/userModel.js'
 import asyncHandler from 'express-async-handler'
 
-// @desc Fetch all words
+// @desc Fetch all words which beleng to users
 // @route GET /api/words
-// @access Public
+// @access Private (Admin)
+const getAllUsersWords = asyncHandler(async (req, res) => {
+  // selecting the `username` and `Words` fields
+  const users = await User.find({}).select('username Words')
+  res.send(users)
+})
+
+// @desc Fetch specific user's words
+// @route GET /api/words/user
+// @access Private
 const getWords = asyncHandler(async (req, res) => {
-  const words = await Word.find({})
+  const { username, Words } = req.user
 
-  if (!words.length > 0) {
-    res.status(404)
-    throw new Error('Word not found')
-  }
-  res.send(words)
+  res.json({ username: username, Words: Words })
 })
 
-// @desc Fetch single word
-// @route GET /api/words/:id
-// @access Public
-const getWordById = asyncHandler(async (req, res) => {
-  const word = await Word.findById(req.params.id)
-
-  if (!word) {
-    res.status(404)
-    throw new Error('Word not found')
-  }
-  res.send(word)
-})
-
-// @desc Create a word
+// @desc Add a new word to an exist list
 // @route POST /api/words
-// @access Public
-const createWord = asyncHandler(async (req, res) => {
+// @access Private
+const addWord = asyncHandler(async (req, res) => {
   const { name, meaning } = req.body
+  const { _id, Words } = req.user
 
   if (!name && !meaning) {
     res.status(404)
     throw new Error('Write a valid name')
   }
 
-  const word = new Word({
-    name: name,
-    meaning: meaning,
-  })
+  Words.set(name, meaning)
 
-  const createdWord = await word.save()
-  res.status(201).json(createdWord)
+  const updatedWordList = await User.findByIdAndUpdate(
+    _id,
+    { Words: Words },
+    { new: true }
+  )
+
+  res.status(201).json(updatedWordList)
 })
 
 // @desc Update a word
@@ -82,4 +77,4 @@ const deleteWord = asyncHandler(async (req, res) => {
   res.json({ message: ` '${word.name}' removed ` })
 })
 
-export { getWords, getWordById, updateWord, createWord, deleteWord }
+export { getAllUsersWords, getWords, updateWord, addWord, deleteWord }

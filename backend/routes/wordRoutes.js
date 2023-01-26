@@ -1,15 +1,14 @@
 import express from 'express'
+import { protect, admin } from '../middleware/authMiddleware.js'
 import {
+  getAllUsersWords,
   getWords,
-  getWordById,
-  updateWord,
-  createWord,
-  deleteWord,
+  addWord,
 } from '../controllers/wordController.js'
 
 const router = express.Router()
 
-router.route('/').get(getWords).post(createWord)
-router.route('/:id').get(getWordById).put(updateWord).delete(deleteWord)
+router.route('/').get(protect, admin, getAllUsersWords).post(protect, addWord)
+router.route('/user').get(protect, getWords)
 
 export default router
