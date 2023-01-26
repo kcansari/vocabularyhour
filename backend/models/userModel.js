@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     isAdmin: { type: Boolean, required: true, default: false },
     verified: { type: Boolean, default: false },
+    Words: {
+      type: Map, // `socialHandles` is a key/value store for string keys
+      of: { type: String, lowercase: true }, // Values must be strings
+    },
   },
   {
     // If you set timestamps: true, Mongoose will add two properties of type Date to your schema:

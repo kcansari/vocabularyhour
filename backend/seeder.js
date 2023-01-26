@@ -3,10 +3,8 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import words from './data/words.js'
 import users from './data/users.js'
-import Word from './models/wordModel.js'
 import User from './models/userModel.js'
 import MailToken from './models/tokenModel.js'
-import WordCollection from './models/wordCollectionModel.js'
 import connectDB from './config/db.js'
 
 dotenv.config()
@@ -14,28 +12,24 @@ connectDB()
 // basicSchemaModel Branch
 const importData = async () => {
   try {
-    await Word.deleteMany()
     await User.deleteMany()
     await MailToken.deleteMany()
-    await WordCollection.deleteMany()
 
-    const createdUsers = await User.insertMany(users)
-    const createdWords = await Word.insertMany(words)
-
-    const adminUser = createdUsers[0]._id
-    const allWordId = createdWords.map((createdWord) => createdWord._id)
-
-    const sampleCollection = [
-      {
-        name: 'Admin Collection',
-        userId: adminUser,
-        words: allWordId,
+    const sampleUser = new User({
+      username: 'kcansari',
+      email: 'sample@example.com',
+      password: '123456',
+      isAdmin: 'false',
+      verified: 'true',
+      Words: {
+        water: 'su',
+        car: 'araba',
+        buy: 'satın almak',
+        pencil: 'kalem',
       },
-    ]
-
-    await WordCollection.insertMany(sampleCollection).catch(function (error) {
-      console.log(error)
     })
+
+    await sampleUser.save()
 
     MailToken.insertMany()
 
