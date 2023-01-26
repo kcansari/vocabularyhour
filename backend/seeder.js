@@ -15,6 +15,8 @@ const importData = async () => {
     await User.deleteMany()
     await MailToken.deleteMany()
 
+    await User.insertMany(users)
+
     const sampleUser = new User({
       username: 'kcansari',
       email: 'sample@example.com',
