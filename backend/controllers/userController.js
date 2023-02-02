@@ -64,12 +64,10 @@ const registerUser = asyncHandler(async (req, res) => {
       res.status(400)
       throw new Error(resMail)
     }
-    res
-      .status(201)
-      .send({
-        message: 'An email sent to your account please verify.',
-        token: generateToken(user._id),
-      })
+    res.status(201).send({
+      message: 'An email sent to your account please verify.',
+      token: generateToken(user._id),
+    })
   } else {
     res.status(400)
     throw new Error('Invalid user data')
@@ -80,19 +78,13 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route GET /api/users/profile
 // @access Private
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id)
+  const user = await User.findById(req.user._id).select('-password')
 
   if (!user) {
     res.status(404)
     throw new Error('User not found')
   }
-  res.json({
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    isAdmin: user.isAdmin,
-    verified: user.verified,
-  })
+  res.json(user)
 })
 
 // @desc Update user profile
