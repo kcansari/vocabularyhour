@@ -5,11 +5,16 @@ import {
   getWords,
   addWord,
   deleteUserWord,
+  updateWord,
 } from '../controllers/wordController.js'
 
 const router = express.Router()
 
-router.route('/').get(protect, admin, getAllUsersWords).post(protect, addWord)
-router.route('/user').get(protect, getWords).delete(protect, deleteUserWord)
+router
+  .route('/')
+  .get(protect, admin, getAllUsersWords)
+  .post(protect, addWord)
+  .delete(protect, deleteUserWord)
+  .put(protect, updateWord)
 
 export default router

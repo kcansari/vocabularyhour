@@ -43,38 +43,48 @@ const addWord = asyncHandler(async (req, res) => {
 })
 
 // @desc Update a word
-// @route PUT /api/words/:id
-// @access Public
+// @route PUT /api/words
+// @access Private
 const updateWord = asyncHandler(async (req, res) => {
   const { name, meaning } = req.body
+  let user = req.user
 
-  const word = await Word.findById(req.params.id)
-
-  if (!word) {
+  if (!name && !meaning) {
     res.status(404)
-    throw new Error('Word not found')
+    throw new Error('Fill all parameters')
+  }
+  if (!user.Words.has(name)) {
+    res.status(404)
+    throw new Error('Collection has not that word.')
   }
 
-  word.name = name
-  word.meaning = meaning
-
-  const updatedWord = await word.save()
-  res.json(updatedWord)
+  user.Words.set(`${name}`, meaning)
+  await user.save()
+  const result = user.Words.get(name)
+  res.json({ message: 'success', data: result })
 })
 
 // @desc Detele a word
-// @route Delete /api/words/:id
+// @route Delete /api/words
 // @access Private
 const deleteUserWord = asyncHandler(async (req, res) => {
-  const word = await Word.findById(req.params.id)
+  const { word } = req.body
+  let { Words } = req.user
 
   if (!word) {
     res.status(404)
     throw new Error('Word not found')
   }
 
-  await word.remove()
-  res.json({ message: ` '${word.name}' removed ` })
+  // delete the word which has been typed as a parameter.
+  Words.delete(`${word}`)
+
+  if (Words.has(`${word}`) !== false) {
+    res.status(404)
+    throw new Error('Word could not delete')
+  }
+  await req.user.save()
+  res.status(200).json({ message: 'Word was deleted', data: Words })
 })
 
 export { getAllUsersWords, getWords, updateWord, addWord, deleteUserWord }
