@@ -77,7 +77,7 @@ const deleteUserWord = asyncHandler(async (req, res) => {
   }
 
   // delete the word which has been typed as a parameter.
-  Words.delete(`${word}`)
+  Words.delete(word)
 
   if (Words.has(`${word}`) !== false) {
     res.status(404)
