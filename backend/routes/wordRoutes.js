@@ -17,4 +17,6 @@ router
   .delete(protect, deleteUserWord)
   .put(protect, updateWord)
 
+router.route('/user').get(protect, getWords)
+
 export default router
