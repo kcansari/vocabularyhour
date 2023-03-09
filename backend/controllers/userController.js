@@ -15,7 +15,7 @@ const authUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,
-      name: user.name,
+      username: user.username,
       email: user.email,
       isAdmin: user.isAdmin,
       verified: user.verified,
@@ -65,6 +65,7 @@ const registerUser = asyncHandler(async (req, res) => {
       throw new Error(resMail)
     }
     res.status(201).send({
+      username: username,
       message: 'An email sent to your account please verify.',
       token: generateToken(user._id),
     })
