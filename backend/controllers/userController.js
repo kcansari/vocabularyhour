@@ -120,25 +120,27 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @access Private
 const changeUserPassword = asyncHandler(async (req, res) => {
   const tokenModel = await MailToken.findOne({ token: req.params.mailtoken })
-  const user = await User.findById(tokenModel.user)
+
   if (!tokenModel) {
     res.status(404)
     throw new Error('Invalid token')
-  }
-  if (user) {
-    if (req.body.password) {
-      user.password = req.body.password
-    }
-
-    const updatedUser = await user.save()
-    res.json({
-      email: updatedUser.email,
-      password: updatedUser.password,
-      message: 'Your password has been changed successfully',
-    })
   } else {
-    res.status(404)
-    throw new Error('User not found')
+    const user = await User.findById(tokenModel.user)
+    if (user) {
+      if (req.body.password) {
+        user.password = req.body.password
+      }
+
+      const updatedUser = await user.save()
+      res.json({
+        email: updatedUser.email,
+        password: updatedUser.password,
+        message: 'Your password has been changed successfully',
+      })
+    } else {
+      res.status(404)
+      throw new Error('User not found')
+    }
   }
 })
 
