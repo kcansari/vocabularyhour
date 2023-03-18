@@ -26,13 +26,17 @@ const addWord = asyncHandler(async (req, res) => {
   const { name, meaning } = req.body
   const { _id, Words } = req.user
 
-  if (!name && !meaning) {
+  if (!name || !meaning) {
     res.status(404)
     throw new Error('Write a valid name')
   }
 
-  Words.set(name, meaning)
+  if (Words.has(name)) {
+    res.status(404)
+    throw new Error('You cannot add the same word multiple times')
+  }
 
+  Words.set(name, meaning)
   const updatedWordList = await User.findByIdAndUpdate(
     _id,
     { Words: Words },
@@ -46,22 +50,25 @@ const addWord = asyncHandler(async (req, res) => {
 // @route PUT /api/words
 // @access Private
 const updateWord = asyncHandler(async (req, res) => {
-  const { name, meaning } = req.body
-  let user = req.user
+  const { name, meaning, currentName } = req.body
+  const { _id, Words } = req.user
 
-  if (!name && !meaning) {
+  if (!name || !meaning) {
     res.status(404)
     throw new Error('Fill all parameters')
   }
-  if (!user.Words.has(name)) {
-    res.status(404)
-    throw new Error('Collection has not that word.')
+  if (currentName !== name) {
+    Words.delete(currentName)
   }
+  Words.set(name, meaning)
 
-  user.Words.set(`${name}`, meaning)
-  await user.save()
-  const result = user.Words.get(name)
-  res.json({ message: 'success', data: result })
+  const updatedWordList = await User.findByIdAndUpdate(
+    _id,
+    { Words: Words },
+    { new: true }
+  )
+
+  res.json({ message: 'success', data: updatedWordList })
 })
 
 // @desc Detele a word

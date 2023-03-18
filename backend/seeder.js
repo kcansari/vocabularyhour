@@ -45,7 +45,7 @@ const importData = async () => {
 
 const destroyData = async () => {
   try {
-    await Word.deleteMany()
+    // await Word.deleteMany()
     await User.deleteMany()
     await MailToken.deleteMany()
 

@@ -49,6 +49,7 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     verified: false,
+    Words: {},
   })
 
   const mailtoken = await MailToken.create({
