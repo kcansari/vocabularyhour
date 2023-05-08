@@ -120,6 +120,8 @@ npm run data:destroy
 | GET     | /verify/resend/:id            | user id                 | This route resends a link to the user's account               |
 | GET     | /verify/:id/:token            | "user id", "mail token" | This route verifies the user's account                        |
 
+## [Demo](https://vocabularyhour-kcs.netlify.app/)
+
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
